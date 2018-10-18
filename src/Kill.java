@@ -15,11 +15,14 @@ public class Kill extends Operator {
 		ArrayList<Cell> walkers_around = get_walkers_around(state.grid, state.john_cell);
 		if (walkers_around.size() == 0)
 			return null;
-		// clone the grid
+
 		Cell[][] new_grid = Cell.clone(state.grid);
+
 		// mark the cells containing white walkers as empty after kill
 		for (Cell walker : walkers_around)
 			new_grid[walker.row][walker.col].cell_type = Cell_Type.EMPTY;
+
+		// make a new node
 		int new_last_interesting_index = -1;
 		Cell new_john_cell = new Cell(state.john_cell.row, state.john_cell.col, state.john_cell.cell_type);
 		State new_state = new State(new_grid, new_last_interesting_index, new_john_cell);

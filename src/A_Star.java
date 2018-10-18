@@ -2,6 +2,7 @@ import java.util.Comparator;
 
 public class A_Star implements Comparator<Node> {
 
+	// index to choose the heuristic function
     int function_idx;
 
     public A_Star(int function_idx) {

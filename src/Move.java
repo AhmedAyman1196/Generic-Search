@@ -16,14 +16,17 @@ public class Move extends Operator {
     public Node apply(Node node) {
         State state = node.state;
         Cell[][] grid = state.grid;
+
         // get a list of the cells that are of interest to the agent, which are cells
         // having white walkers around them
         ArrayList<Cell> interesting_cells = get_interesting_cells(grid, state.john_cell);
         Collections.sort(interesting_cells);
+
         int next_interesting = state.last_interesting_index + 1;
         if (next_interesting >= interesting_cells.size())
             return null;
 
+        // make a new node, return it
         Cell[][] new_grid = Cell.clone(grid);
         int new_last_interesting_index = next_interesting;
         Cell new_john_cell = Cell.clone(interesting_cells.get(next_interesting));
@@ -55,11 +58,15 @@ public class Move extends Operator {
         queue.push(john_cell);
         reached[john_cell.row][john_cell.col] = true;
         ArrayList<Cell> interesting_cells = new ArrayList<>();
+
         while (!queue.isEmpty()) {
             Cell current = queue.pollFirst();
+
+            // if there are white walkers around the cell, then it is of interest
             if (walker_around(current, grid))
                 interesting_cells.add(current);
 
+            // move in the 4 directions and
             for (int dir = 0; dir < 4; dir++) {
                 int new_row = current.row + dx[dir];
                 int new_col = current.col + dy[dir];

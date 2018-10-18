@@ -21,4 +21,9 @@ public class Solution {
 		this.cost = cost;
 		this.expandedNodes = expandedNodes;
 	}
+	
+	@Override
+	public String toString() {
+		return "Cost: " + cost + ", Expaned Nodes: " + expandedNodes;
+	}
 }
