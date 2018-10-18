@@ -22,8 +22,6 @@ public abstract class Problem {
      */
     ArrayList<State> state_space;
 
-    private static final int infinity = (int)1e3;
-
     /**
      * to be implemented in each problem that extends the class.
      *
@@ -53,9 +51,10 @@ public abstract class Problem {
         Node node = new Node(initial_state, null, null, 0, 0);
 
         nodes.add(node);
-        int expanded_nodes = 0;
+        int expanded_nodes = 0, max_depth = -1;
         while (!nodes.isEmpty()) {
             Node current_node = nodes.remove();
+            max_depth = Math.max(max_depth, current_node.depth);
             expanded_nodes++;
             if (goal_test(current_node.state))
                 return new Solution(current_node.get_operators(), current_node.get_nodes(), current_node.path_cost,
@@ -64,14 +63,14 @@ public abstract class Problem {
                 Node next_node = operator.apply(current_node);
                 if (next_node != null) {
                     if (queuing_function instanceof IDS) {
-                        if (next_node.depth < ((IDS) queuing_function).depth)
+                        if (next_node.depth <= ((IDS) queuing_function).depth)
                             nodes.add(next_node);
                     } else
                         nodes.add(next_node);
                 }
             }
         }
-        if (queuing_function instanceof IDS && ((IDS) queuing_function).depth < infinity) {
+        if (queuing_function instanceof IDS && ((IDS) queuing_function).depth == max_depth) {
             IDS qf = (IDS) queuing_function;
             qf.depth++;
             return search(qf);
