@@ -1,15 +1,28 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class Move extends Operator {
 
+    /**
+     * performs move operation on the current node. This is done by choosing the
+     * next interesting cell and moving the agent to that cell. The list of the
+     * cells that are of interest to the agent contains the cells having white
+     * walkers around them. A new state is created and added to a new node which is
+     * then returned. The choice of the nodes is done using an index pointing to the
+     * last chosen cell which is attached to the state.
+     */
     @Override
     public Node apply(Node node) {
         State state = node.state;
         Cell[][] grid = state.grid;
+        // get a list of the cells that are of interest to the agent, which are cells
+        // having white walkers around them
         ArrayList<Cell> interesting_cells = get_interesting_cells(grid, state.john_cell);
+        Collections.sort(interesting_cells);
         int next_interesting = state.last_interesting_index + 1;
-        if (next_interesting >= interesting_cells.size()) return null;
+        if (next_interesting >= interesting_cells.size())
+            return null;
 
         Cell[][] new_grid = Cell.clone(grid);
         int new_last_interesting_index = next_interesting;
@@ -28,6 +41,14 @@ public class Move extends Operator {
         return new Node(new_state, new_parent, new_operator, new_depth, new_path_cost);
     }
 
+    /**
+     * returns a list containing all the cells of interest to the agent. These are
+     * cells that have white walkers adjacent to them.
+     *
+     * @param grid
+     * @param john_cell
+     * @return
+     */
     static ArrayList<Cell> get_interesting_cells(Cell[][] grid, Cell john_cell) {
         boolean[][] reached = new boolean[grid.length][grid[0].length];
         LinkedList<Cell> queue = new LinkedList<Cell>();
@@ -42,10 +63,10 @@ public class Move extends Operator {
             for (int dir = 0; dir < 4; dir++) {
                 int new_row = current.row + dx[dir];
                 int new_col = current.col + dy[dir];
-                if (valid(new_row, new_col, grid) && !reached[new_row][new_col] &&
-                        (grid[new_row][new_col].cell_type == Cell_Type.EMPTY ||
-                                grid[new_row][new_col].cell_type == Cell_Type.STONE ||
-                        grid[new_row][new_col].cell_type == Cell_Type.JOHN)) {
+                if (valid(new_row, new_col, grid) && !reached[new_row][new_col]
+                        && (grid[new_row][new_col].cell_type == Cell_Type.EMPTY
+                        || grid[new_row][new_col].cell_type == Cell_Type.STONE
+                        || grid[new_row][new_col].cell_type == Cell_Type.JOHN)) {
                     reached[new_row][new_col] = true;
                     queue.addLast(grid[new_row][new_col]);
                 }
