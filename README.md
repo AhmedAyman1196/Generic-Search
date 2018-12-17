@@ -1,6 +1,15 @@
 # Artificially Intelligent Agent for Saving Westeros
+This is a generic Java implementation for an agent who wants to solve a certain problem represented as
 
-This is a java implemention for an intelligent agent who should search for a solution to kill all white walkers in Westeros using minimum number of dragon glasses without looping infinitely using one of the following search techinques : 
+1- Initial State
+2- State Space
+3- Set of Operators
+4- Goal Test Function
+5- Path Cost Function
+
+This project includes solving the following example using the generic search.
+Searching for a solution to kill all white walkers in Westeros using the minimum number of dragon glasses without looping infinitely using one of the following search techniques :
+
 - **BFS**
 - **DFS**
 - **Greedy**
